@@ -6,6 +6,7 @@ public final class ModCatalog {
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.fullidentify.FullIdentify());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.starterequipment.StarterEquipment());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.secretradar.SecretRadar());
+  options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.doublegold.DoubleGold());
   return options;
  }
 }
