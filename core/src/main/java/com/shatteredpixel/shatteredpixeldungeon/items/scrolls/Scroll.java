@@ -209,7 +209,7 @@ public abstract class Scroll extends Item {
 	}
 	
 	public boolean isKnown() {
-		return anonymous || (handler != null && handler.isKnown( this ));
+		return com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.known(this, anonymous || (handler != null && handler.isKnown( this )));
 	}
 	
 	public void setKnown() {

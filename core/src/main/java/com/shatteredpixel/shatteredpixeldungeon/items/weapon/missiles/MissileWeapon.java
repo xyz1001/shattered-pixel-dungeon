@@ -616,7 +616,7 @@ abstract public class MissileWeapon extends Weapon {
 	
 	@Override
 	public boolean isIdentified() {
-		return levelKnown && cursedKnown;
+		return com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.identified(this, levelKnown && cursedKnown);
 	}
 	
 	@Override

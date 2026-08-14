@@ -231,6 +231,7 @@ public class Dungeon {
 	}
 	
 	public static void init() {
+		com.shatteredpixel.shatteredpixeldungeon.mod.ModRegistry.newGame();
 
 		initialVersion = version = Game.versionCode;
 		challenges = SPDSettings.challenges();
@@ -637,6 +638,7 @@ public class Dungeon {
 			bundle.put( HERO, hero );
 			bundle.put( DEPTH, depth );
 			bundle.put( BRANCH, branch );
+			com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.store(bundle);
 
 			bundle.put( GOLD, gold );
 			bundle.put( ENERGY, energy );
@@ -723,6 +725,7 @@ public class Dungeon {
 	public static void loadGame( int save, boolean fullLoad ) throws IOException {
 		
 		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.gameFile( save ) );
+		com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.restore(bundle);
 
 		initialVersion = bundle.getInt( INIT_VER );
 		version = bundle.getInt( VERSION );

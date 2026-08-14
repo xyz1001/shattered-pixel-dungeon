@@ -128,6 +128,7 @@ public class Item implements Bundlable {
 			GameScene.pickUp( this, pos );
 			Sample.INSTANCE.play( Assets.Sounds.ITEM );
 			hero.spendAndNext( pickupDelay() );
+			com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.picked(this);
 			return true;
 			
 		} else {
@@ -447,7 +448,7 @@ public class Item implements Bundlable {
 	}
 	
 	public boolean isIdentified() {
-		return levelKnown && cursedKnown;
+		return com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.identified(this, levelKnown && cursedKnown);
 	}
 	
 	public boolean isEquipped( Hero hero ) {

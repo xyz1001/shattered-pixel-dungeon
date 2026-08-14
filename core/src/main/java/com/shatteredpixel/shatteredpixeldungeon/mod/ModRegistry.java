@@ -1,0 +1,19 @@
+package com.shatteredpixel.shatteredpixeldungeon.mod;
+import com.watabou.utils.Bundle; import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import java.util.*;
+public final class ModRegistry {
+ private static final List<ModOption> OPTIONS=Collections.unmodifiableList(ModCatalog.createOptions()); private static final String ACTIVE="mod.active", CONFIRMED="mod.confirmed", SNAPSHOT="mod.snapshot";
+ private static final Set<String> snapshot=new HashSet<>(), pending=new LinkedHashSet<>();
+ private static Object level; private static int position=-1;
+ private ModRegistry(){} public static List<ModOption> options(){return OPTIONS;}
+ public static void newGame(){ModSettings.active(Collections.emptySet());ModSettings.confirmed(false);snapshot.clear();for(ModOption o:OPTIONS)snapshot.add(o.id());pending.clear();level=null;position=-1;for(ModOption o:OPTIONS)o.onNewGame();}
+ public static void start(Set<String> ids){ModSettings.active(ids); ModSettings.confirmed(true); snapshot.clear();for(ModOption o:OPTIONS)snapshot.add(o.id());pending.clear(); level=null;position=-1; for(ModOption o:OPTIONS){ModSettings.setDefault(o.id(),ids.contains(o.id())); if(ids.contains(o.id()))o.onStart();}}
+ public static void tick(Object currentLevel,int currentPosition){if(!ModSettings.confirmed())return;if(currentLevel!=level){level=currentLevel;position=-1;for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onFloor();}if(currentPosition!=position){position=currentPosition;for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onMove();}}
+ public static int modifyGold(int n){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))n=o.modifyGold(n);return n;}
+ public static void picked(Item i){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onItemPickedUp(i);}
+ public static boolean identified(Item i,boolean value){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))value=o.isIdentified(i,value);return value;}
+ public static boolean hasPending(){return !pending.isEmpty();} public static List<ModOption> pendingOptions(){List<ModOption> result=new ArrayList<>();for(ModOption o:OPTIONS)if(pending.contains(o.id()))result.add(o);return Collections.unmodifiableList(result);}
+ public static void confirmPending(Set<String> ids){Set<String> selected=new HashSet<>(ids);Set<String> active=ModSettings.active();List<ModOption> enabled=new ArrayList<>();for(ModOption o:OPTIONS)if(pending.contains(o.id())){if(selected.contains(o.id())&&!active.contains(o.id())){active.add(o.id());enabled.add(o);}snapshot.add(o.id());}ModSettings.active(active);for(ModOption o:enabled)o.onStart();pending.clear();}
+ public static void store(Bundle b){b.put(ACTIVE,ModSettings.active().toArray(new String[0]));b.put(CONFIRMED,ModSettings.confirmed());b.put(SNAPSHOT,snapshot.toArray(new String[0]));for(ModOption o:OPTIONS)o.store(b);}
+ public static void restore(Bundle b){Set<String> ids=new HashSet<>();pending.clear();snapshot.clear();if(b.contains(ACTIVE)){Collections.addAll(ids,b.getStringArray(ACTIVE));ModSettings.confirmed(b.contains(CONFIRMED)&&b.getBoolean(CONFIRMED));}else{for(ModOption o:OPTIONS)if(ModSettings.legacy(o.id()))ids.add(o.id());ModSettings.confirmed(true);}ModSettings.active(ids);if(b.contains(SNAPSHOT)){Collections.addAll(snapshot,b.getStringArray(SNAPSHOT));for(ModOption o:OPTIONS)if(!snapshot.contains(o.id()))pending.add(o.id());}else{for(ModOption o:OPTIONS)if(o.isNewOnExistingSave())pending.add(o.id());for(ModOption o:OPTIONS)if(!pending.contains(o.id()))snapshot.add(o.id());}for(ModOption o:OPTIONS)o.restore(b);}
+}

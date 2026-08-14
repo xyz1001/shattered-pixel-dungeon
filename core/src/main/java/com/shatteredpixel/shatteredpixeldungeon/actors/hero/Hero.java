@@ -829,6 +829,8 @@ public class Hero extends Char {
 	
 	@Override
 	public boolean act() {
+		com.shatteredpixel.shatteredpixeldungeon.mod.ModStartPrompt.check();
+		com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.tick();
 		
 		//calls to dungeon.observe will also update hero's local FOV.
 		fieldOfView = Dungeon.level.heroFOV;
