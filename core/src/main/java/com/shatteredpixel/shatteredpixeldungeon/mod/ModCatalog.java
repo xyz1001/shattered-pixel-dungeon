@@ -5,6 +5,7 @@ public final class ModCatalog {
  public static List<ModOption> createOptions(){List<ModOption> options=new ArrayList<>();
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.fullidentify.FullIdentify());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.starterequipment.StarterEquipment());
+  options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.secretradar.SecretRadar());
   return options;
  }
 }
