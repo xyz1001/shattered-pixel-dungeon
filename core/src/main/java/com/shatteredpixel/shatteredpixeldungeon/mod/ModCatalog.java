@@ -8,6 +8,7 @@ public final class ModCatalog {
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.secretradar.SecretRadar());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.doublegold.DoubleGold());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.starterbags.StarterBags());
+  options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.questpreview.QuestPreview());
   return options;
  }
 }
