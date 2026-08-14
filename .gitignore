@@ -18,3 +18,7 @@ local.properties
 #intellij project files
 *.iml
 *.idea
+
+# Local OpenCode workflow files
+/.ignore
+/.slim/
