@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ringbalance.RingBalance;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class RingOfAccuracy extends Ring {
@@ -36,20 +37,20 @@ public class RingOfAccuracy extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (Math.pow(1.3f, soloBuffedBonus()) - 1f)));
+					Messages.decimalFormat("#.##", 100f * (accuracyMultiplier(soloBuffedBonus()) - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.3f, combinedBuffedBonus(Dungeon.hero)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * (accuracyMultiplier(combinedBuffedBonus(Dungeon.hero)) - 1f)));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 30f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", RingBalance.enabled() ? 50f : 30f));
 		}
 	}
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.3f, level+1)-1f)) + "%";
+		return Messages.decimalFormat("#.##", 100f * (accuracyMultiplier(level+1)-1f)) + "%";
 	}
 	
 	@Override
@@ -58,7 +59,11 @@ public class RingOfAccuracy extends Ring {
 	}
 	
 	public static float accuracyMultiplier( Char target ){
-		return (float)Math.pow(1.3f, getBuffedBonus(target, Accuracy.class));
+		return accuracyMultiplier(getBuffedBonus(target, Accuracy.class));
+	}
+
+	private static float accuracyMultiplier(int bonus){
+		return (float)Math.pow(RingBalance.enabled() ? 1.5 : 1.3, bonus);
 	}
 	
 	public class Accuracy extends RingBuff {

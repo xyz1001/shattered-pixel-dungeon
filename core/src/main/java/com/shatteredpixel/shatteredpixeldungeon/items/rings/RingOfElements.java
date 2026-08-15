@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ringbalance.RingBalance;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.HashSet;
@@ -48,20 +49,20 @@ public class RingOfElements extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, soloBuffedBonus()))));
+					Messages.decimalFormat("#.##", 100f * (1f - resistanceMultiplier(soloBuffedBonus()))));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, combinedBuffedBonus(Dungeon.hero)))));
+						Messages.decimalFormat("#.##", 100f * (1f - resistanceMultiplier(combinedBuffedBonus(Dungeon.hero)))));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 17.5f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", RingBalance.enabled() ? 50f : 17.5f));
 		}
 	}
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, level+1))) + "%";
+		return Messages.decimalFormat("#.##", 100f * (1f - resistanceMultiplier(level+1))) + "%";
 	}
 	
 	@Override
@@ -90,11 +91,16 @@ public class RingOfElements extends Ring {
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				return (float)Math.pow(0.825, getBuffedBonus(target, Resistance.class));
+				return resistanceMultiplier(getBuffedBonus(target, Resistance.class));
 			}
 		}
 		
 		return 1f;
+	}
+
+	private static float resistanceMultiplier(int bonus){
+		if (!RingBalance.enabled()) return (float)Math.pow(0.825, bonus);
+		return bonus > 0 ? (float)(0.50 * Math.pow(0.795, bonus-1)) : (float)Math.pow(0.75, bonus);
 	}
 	
 	public class Resistance extends RingBuff {

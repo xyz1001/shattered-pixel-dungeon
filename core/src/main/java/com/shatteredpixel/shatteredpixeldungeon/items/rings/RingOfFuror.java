@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ringbalance.RingBalance;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class RingOfFuror extends Ring {
@@ -36,20 +37,20 @@ public class RingOfFuror extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (Math.pow(1.09051f, soloBuffedBonus()) - 1f)));
+					Messages.decimalFormat("#.##", 100f * (furorMultiplier(soloBuffedBonus()) - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.09051f, combinedBuffedBonus(Dungeon.hero)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * (furorMultiplier(combinedBuffedBonus(Dungeon.hero)) - 1f)));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 9.051f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", RingBalance.enabled() ? 17.5f : 9.051f));
 		}
 	}
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.09051f, level+1)-1f)) + "%";
+		return Messages.decimalFormat("#.##", 100f * (furorMultiplier(level+1)-1f)) + "%";
 	}
 
 	@Override
@@ -58,7 +59,11 @@ public class RingOfFuror extends Ring {
 	}
 	
 	public static float attackSpeedMultiplier(Char target ){
-		return (float)Math.pow(1.09051, getBuffedBonus(target, Furor.class));
+		return furorMultiplier(getBuffedBonus(target, Furor.class));
+	}
+
+	private static float furorMultiplier(int bonus){
+		return (float)Math.pow(RingBalance.enabled() ? 1.175 : 1.09051, bonus);
 	}
 
 	public class Furor extends RingBuff {

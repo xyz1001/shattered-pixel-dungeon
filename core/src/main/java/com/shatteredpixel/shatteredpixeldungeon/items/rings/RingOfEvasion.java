@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ringbalance.RingBalance;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class RingOfEvasion extends Ring {
@@ -36,20 +37,20 @@ public class RingOfEvasion extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (Math.pow(1.125f, soloBuffedBonus()) - 1f)));
+					Messages.decimalFormat("#.##", 100f * (evasionMultiplier(soloBuffedBonus()) - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.125f, combinedBuffedBonus(Dungeon.hero)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * (evasionMultiplier(combinedBuffedBonus(Dungeon.hero)) - 1f)));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 12.5f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", RingBalance.enabled() ? 100f : 12.5f));
 		}
 	}
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.125f, level+1)-1f)) + "%";
+		return Messages.decimalFormat("#.##", 100f * (evasionMultiplier(level+1)-1f)) + "%";
 	}
 	
 	@Override
@@ -58,7 +59,12 @@ public class RingOfEvasion extends Ring {
 	}
 	
 	public static float evasionMultiplier( Char target ){
-		return (float) Math.pow( 1.125, getBuffedBonus(target, Evasion.class));
+		return evasionMultiplier(getBuffedBonus(target, Evasion.class));
+	}
+
+	private static float evasionMultiplier(int bonus){
+		if (!RingBalance.enabled()) return (float)Math.pow(1.125, bonus);
+		return bonus > 0 ? (float)(2.0 * Math.pow(1.175, bonus-1)) : (float)Math.pow(1.175, bonus);
 	}
 
 	public class Evasion extends RingBuff {
