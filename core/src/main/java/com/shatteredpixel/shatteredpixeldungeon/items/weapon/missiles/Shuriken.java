@@ -24,6 +24,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.mod.shurikeninstantthrow.ShurikenInstantThrow;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
@@ -48,7 +50,7 @@ public class Shuriken extends MissileWeapon {
 	@Override
 	protected void onThrow(int cell) {
 		super.onThrow(cell);
-		if (curUser.buff(ShurikenInstantTracker.class) == null) {
+		if (!ShurikenInstantThrow.enabled() && curUser.buff(ShurikenInstantTracker.class) == null) {
 			//1 less turn as the attack will be instant
 			FlavourBuff.affect(curUser, ShurikenInstantTracker.class, ShurikenInstantTracker.DURATION-1);
 		}
@@ -56,6 +58,9 @@ public class Shuriken extends MissileWeapon {
 
 	@Override
 	public float castDelay(Char user, int cell) {
+		if (ShurikenInstantThrow.enabled()) {
+			return user instanceof Hero && ((Hero) user).justMoved ? 0 : super.castDelay(user, cell);
+		}
 		return user.buff(ShurikenInstantTracker.class) != null ? super.castDelay(user, cell) : 0;
 	}
 

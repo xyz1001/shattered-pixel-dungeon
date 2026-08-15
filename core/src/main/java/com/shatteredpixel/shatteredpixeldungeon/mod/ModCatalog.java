@@ -10,6 +10,7 @@ public final class ModCatalog {
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.starterbags.StarterBags());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.questpreview.QuestPreview());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.buffdurationstacking.BuffDurationStacking());
+  options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.shurikeninstantthrow.ShurikenInstantThrow());
   return options;
  }
 }

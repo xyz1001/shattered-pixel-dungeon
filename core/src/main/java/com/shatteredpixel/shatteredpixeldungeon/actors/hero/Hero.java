@@ -215,6 +215,7 @@ public class Hero extends Char {
 
 	public boolean ready = false;
 	public boolean damageInterrupt = true;
+	public boolean justMoved = false;
 	public HeroAction curAction = null;
 	public HeroAction lastAction = null;
 
@@ -812,6 +813,7 @@ public class Hero extends Char {
 
 	@Override
 	public void spendConstant(float time) {
+		justMoved = false;
 		super.spendConstant(time);
 	}
 
@@ -1863,6 +1865,7 @@ public class Hero extends Char {
 			move(step);
 
 			spend( delay / speed() );
+			justMoved = true;
 			
 			search(false);
 
