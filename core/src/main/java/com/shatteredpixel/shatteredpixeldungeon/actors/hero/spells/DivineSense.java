@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.mod.buffdurationstacking.HeroBuffDurationStacking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -58,7 +59,7 @@ public class DivineSense extends ClericSpell {
 
 	@Override
 	public void onCast(HolyTome tome, Hero hero) {
-		Buff.prolong(hero, DivineSenseTracker.class, DivineSenseTracker.DURATION);
+		HeroBuffDurationStacking.affect(hero, DivineSenseTracker.class, DivineSenseTracker.DURATION);
 		Dungeon.observe();
 
 		Sample.INSTANCE.play(Assets.Sounds.READ);
@@ -69,7 +70,7 @@ public class DivineSense extends ClericSpell {
 
 		Char ally = PowerOfMany.getPoweredAlly();
 		if (ally != null && ally.buff(LifeLinkSpell.LifeLinkSpellBuff.class) != null){
-			Buff.prolong(ally, DivineSenseTracker.class, DivineSenseTracker.DURATION);
+			HeroBuffDurationStacking.affect(ally, DivineSenseTracker.class, DivineSenseTracker.DURATION);
 			SpellSprite.show(ally, SpellSprite.VISION);
 		}
 

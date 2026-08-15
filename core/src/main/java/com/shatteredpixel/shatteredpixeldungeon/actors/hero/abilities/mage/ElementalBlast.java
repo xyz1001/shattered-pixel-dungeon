@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.mod.buffdurationstacking.HeroBuffDurationStacking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
@@ -321,7 +322,7 @@ public class ElementalBlast extends ArmorAbility {
 								//*** Wand of Prismatic Light ***
 								} else if (finalWandCls == WandOfPrismaticLight.class){
 									if (mob.isAlive() && mob.alignment != Char.Alignment.ALLY) {
-										Buff.prolong(mob, Blindness.class, effectMulti*Blindness.DURATION/2);
+										HeroBuffDurationStacking.affect(mob, Blindness.class, effectMulti*Blindness.DURATION/2);
 										charsHit++;
 									}
 
@@ -370,14 +371,14 @@ public class ElementalBlast extends ArmorAbility {
 								//*** Wand of Corruption ***
 								} else if (finalWandCls == WandOfCorruption.class){
 									if (mob.isAlive() && mob.alignment != Char.Alignment.ALLY) {
-										Buff.prolong(mob, Amok.class, effectMulti*5f);
+										HeroBuffDurationStacking.affect(mob, Amok.class, effectMulti*5f);
 										charsHit++;
 									}
 
 								//*** Wand of Regrowth ***
 								} else if (finalWandCls == WandOfRegrowth.class){
 									if (mob.alignment != Char.Alignment.ALLY) {
-										Buff.prolong( mob, Roots.class, effectMulti*Roots.DURATION );
+										HeroBuffDurationStacking.affect( mob, Roots.class, effectMulti*Roots.DURATION );
 										charsHit++;
 									}
 								}
@@ -410,9 +411,9 @@ public class ElementalBlast extends ArmorAbility {
 						//*** Wand of Prismatic Light ***
 						} else if (finalWandCls == WandOfPrismaticLight.class){
 							if (Dungeon.isChallenged(Challenges.DARKNESS)){
-								Buff.prolong(hero, Light.class, effectMulti * 10f);
+								HeroBuffDurationStacking.affect(hero, Light.class, effectMulti * 10f);
 							} else {
-								Buff.prolong(hero, Light.class, effectMulti * 50f);
+								HeroBuffDurationStacking.affect(hero, Light.class, effectMulti * 50f);
 							}
 
 						}

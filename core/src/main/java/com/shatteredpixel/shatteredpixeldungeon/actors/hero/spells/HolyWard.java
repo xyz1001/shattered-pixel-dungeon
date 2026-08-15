@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.mod.buffdurationstacking.BuffDurationStacking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
@@ -101,7 +102,9 @@ public class HolyWard extends ClericSpell {
 		}
 
 		public void extend(float extension){
-			if (cooldown()+extension <= 2*DURATION){
+			if (BuffDurationStacking.enabled()) {
+				spend(extension);
+			} else if (cooldown()+extension <= 2*DURATION){
 				spend(extension);
 			} else {
 				postpone(2*DURATION);
