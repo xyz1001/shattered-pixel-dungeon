@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScrol
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -78,6 +79,7 @@ public class Recycle extends InventorySpell {
 				result = Generator.randomUsingDefaults(Generator.Category.SEED);
 			} else if (item instanceof Runestone) {
 				result = Generator.randomUsingDefaults(Generator.Category.STONE);
+				result = ModHooks.recycleRunestone(item, result);
 			} else {
 				result = TippedDart.randomTipped(1);
 			}
