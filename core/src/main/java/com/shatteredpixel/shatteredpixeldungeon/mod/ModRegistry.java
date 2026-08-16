@@ -1,5 +1,5 @@
 package com.shatteredpixel.shatteredpixeldungeon.mod;
-import com.watabou.utils.Bundle; import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.watabou.utils.Bundle; import com.shatteredpixel.shatteredpixeldungeon.items.Item; import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import java.util.*;
 public final class ModRegistry {
  private static final List<ModOption> OPTIONS=Collections.unmodifiableList(ModCatalog.createOptions()); private static final String ACTIVE="mod.active", CONFIRMED="mod.confirmed", SNAPSHOT="mod.snapshot";
@@ -14,6 +14,9 @@ public final class ModRegistry {
  public static float modifyBerserkDamageFactor(float damage,float power){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))damage=o.modifyBerserkDamageFactor(damage,power);return damage;} public static int modifyComboRequirement(int requirement,com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo.ComboMove move){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))requirement=o.modifyComboRequirement(requirement,move);return requirement;} public static float modifyComboDamageMultiplier(float multiplier,com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo.ComboMove move,int count){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))multiplier=o.modifyComboDamageMultiplier(multiplier,move,count);return multiplier;}
  public static void picked(Item i){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onItemPickedUp(i);}
  public static boolean identified(Item i,boolean value){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))value=o.isIdentified(i,value);return value;}
+ public static ArrayList<Scroll> unstableSpellbookCandidates(Scroll original){ArrayList<Scroll> result=new ArrayList<>();result.add(original);for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))result=o.unstableSpellbookCandidates(result);return result;}
+ public static Item recycleRunestone(Item original,Item result){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))result=o.recycleRunestone(original,result);return result;}
+ public static boolean unstableSpellbookScrollAllowed(Scroll original){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id())&&o.unstableSpellbookScrollAllowed(original))return true;return false;}
  public static boolean hasPending(){return !pending.isEmpty();} public static List<ModOption> pendingOptions(){List<ModOption> result=new ArrayList<>();for(ModOption o:OPTIONS)if(pending.contains(o.id()))result.add(o);return Collections.unmodifiableList(result);}
  public static void confirmPending(Set<String> ids){Set<String> selected=new HashSet<>(ids);Set<String> active=ModSettings.active();List<ModOption> enabled=new ArrayList<>();for(ModOption o:OPTIONS)if(pending.contains(o.id())){if(selected.contains(o.id())&&!active.contains(o.id())){active.add(o.id());enabled.add(o);}snapshot.add(o.id());}ModSettings.active(active);for(ModOption o:enabled)o.onStart();pending.clear();}
  public static void store(Bundle b){b.put(ACTIVE,ModSettings.active().toArray(new String[0]));b.put(CONFIRMED,ModSettings.confirmed());b.put(SNAPSHOT,snapshot.toArray(new String[0]));for(ModOption o:OPTIONS)o.store(b);}

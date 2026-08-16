@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -148,9 +149,28 @@ public class UnstableSpellbook extends Artifact {
 				||((scroll instanceof ScrollOfIdentify ||
 				scroll instanceof ScrollOfRemoveCurse ||
 				scroll instanceof ScrollOfMagicMapping) && Random.Int(2) == 0)
-				//cannot roll transmutation
-				|| (scroll instanceof ScrollOfTransmutation));
+				//cannot roll transmutation unless a mod explicitly permits it
+				|| (scroll instanceof ScrollOfTransmutation && !ModHooks.unstableSpellbookScrollAllowed(scroll)));
 
+		ArrayList<Scroll> candidates = ModHooks.unstableSpellbookCandidates(scroll);
+		if (candidates.size() > 1){
+			String[] options = new String[candidates.size()];
+			for (int i = 0; i < candidates.size(); i++) options[i] = candidates.get(i).trueName();
+			GameScene.show(new WndOptions(new ItemSprite(this), Messages.get(this, "prompt"),
+					Messages.get(this, "read_empowered"), options){
+				@Override
+				protected void onSelect(int index) {
+					readScroll(hero, candidates.get(index));
+				}
+				@Override
+				public void onBackPressed() {}
+			});
+			return;
+		}
+		readScroll(hero, scroll);
+	}
+
+	private void readScroll(Hero hero, Scroll scroll){
 		scroll.anonymize();
 		scroll.talentChance = 0;  //spellbook does not trigger on-scroll talents
 		curItem = scroll;
