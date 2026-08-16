@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -267,7 +268,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 	public ComboMove getHighestMove(){
 		ComboMove best = null;
 		for (ComboMove move : ComboMove.values()){
-			if (count >= move.comboReq){
+			if (count >= ModHooks.comboRequirement(move.comboReq, move)){
 				best = move;
 			}
 		}
@@ -281,7 +282,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 	public boolean canUseMove(ComboMove move){
 		if (move == ComboMove.CLOBBER && clobberUsed)   return false;
 		if (move == ComboMove.PARRY && parryUsed)       return false;
-		return move.comboReq <= count;
+		return ModHooks.comboRequirement(move.comboReq, move) <= count;
 	}
 
 	public void useMove(ComboMove move){
@@ -363,6 +364,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 				dmgMulti = 0.6f;
 				break;
 		}
+		dmgMulti = ModHooks.comboDamageMultiplier(dmgMulti, moveBeingUsed, count);
 
 		int oldPos = enemy.pos;
 		if (hero.attack(enemy, dmgMulti, dmgBonus, Char.INFINITE_ACCURACY)){
@@ -398,7 +400,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 					for (Char ch : Actor.chars()) {
 						if (ch != enemy && ch.alignment == Char.Alignment.ENEMY
 								&& PathFinder.distance[ch.pos] < Integer.MAX_VALUE) {
-							int aoeHit = Math.round(target.damageRoll() * 0.25f * count);
+							int aoeHit = Math.round(target.damageRoll() * ModHooks.comboDamageMultiplier(0.25f * count, moveBeingUsed, count));
 							aoeHit /= 2;
 							aoeHit -= ch.drRoll();
 							if (ch.buff(Vulnerable.class) != null) aoeHit *= 1.33f;

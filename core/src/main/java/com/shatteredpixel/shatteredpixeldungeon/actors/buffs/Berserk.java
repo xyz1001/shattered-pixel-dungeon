@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal.WarriorShield;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -133,7 +134,7 @@ public class Berserk extends ShieldBuff implements ActionIndicator.Action {
 			if (powerLossBuffer > 0){
 				powerLossBuffer--;
 			} else {
-				power -= GameMath.gate(0.1f, power, 1f) * 0.05f * Math.pow((target.HP / (float) target.HT), 2);
+				power -= ModHooks.berserkPowerLoss(GameMath.gate(0.1f, power, 1f) * 0.05f * (float)Math.pow((target.HP / (float) target.HT), 2), power, target.HP, target.HT);
 
 				if (power < 1f){
 					ActionIndicator.clearAction(this);
@@ -170,7 +171,7 @@ public class Berserk extends ShieldBuff implements ActionIndicator.Action {
 	}
 
 	public float damageFactor(float dmg){
-		return dmg * Math.min(1.5f, 1f + (power / 2f));
+		return dmg * ModHooks.berserkDamageFactor(Math.min(1.5f, 1f + (power / 2f)), power);
 	}
 
 	public boolean berserking(){

@@ -12,6 +12,7 @@ public final class ModCatalog {
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.buffdurationstacking.BuffDurationStacking());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.shurikeninstantthrow.ShurikenInstantThrow());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.ringbalance.RingBalance());
+  options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.warriorbalance.WarriorBalance());
   return options;
  }
 }
