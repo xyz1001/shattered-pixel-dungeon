@@ -15,6 +15,7 @@ public final class ModCatalog {
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.warriorbalance.WarriorBalance());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.chaoticspellbook.ChaoticSpellbook());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.enchantmentrecycle.EnchantmentRecycle());
+  options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.actiontimer.ActionTimer());
   return options;
  }
 }

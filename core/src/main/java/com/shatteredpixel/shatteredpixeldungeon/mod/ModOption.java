@@ -1,8 +1,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.mod;
 import com.watabou.utils.Bundle;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import java.util.ArrayList;
 public interface ModOption {
  String id(); String title(); default boolean defaultEnabled(){return false;} default boolean isNewOnExistingSave(){return false;}

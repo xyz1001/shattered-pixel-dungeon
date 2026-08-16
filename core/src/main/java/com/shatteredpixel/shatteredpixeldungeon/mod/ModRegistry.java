@@ -1,7 +1,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.mod;
-import com.watabou.utils.Bundle; import com.shatteredpixel.shatteredpixeldungeon.items.Item; import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.watabou.utils.Bundle; import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob; import com.shatteredpixel.shatteredpixeldungeon.items.Item; import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll; import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import java.util.*;
 public final class ModRegistry {
+  public static void updateMobSprite(MobSprite sprite,Mob mob){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onMobSpriteUpdate(sprite,mob);}
+  public static void destroyMobSprite(MobSprite sprite){for(ModOption o:OPTIONS)o.onMobSpriteDestroy(sprite);}
+  public static void heroReadyForInput(){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onHeroReadyForInput();}
  private static final List<ModOption> OPTIONS=Collections.unmodifiableList(ModCatalog.createOptions()); private static final String ACTIVE="mod.active", CONFIRMED="mod.confirmed", SNAPSHOT="mod.snapshot";
  private static final Set<String> snapshot=new HashSet<>(), pending=new LinkedHashSet<>();
  private static Object level; private static int position=-1;

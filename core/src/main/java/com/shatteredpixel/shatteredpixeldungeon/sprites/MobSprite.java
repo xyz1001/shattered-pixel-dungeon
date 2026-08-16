@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ModRegistry;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.tweeners.AlphaTweener;
@@ -38,6 +39,19 @@ public class MobSprite extends CharSprite {
 	public void update() {
 		sleeping = ch != null && ch.isAlive() && ((Mob)ch).state == ((Mob)ch).SLEEPING;
 		super.update();
+		ModRegistry.updateMobSprite(this, ch instanceof Mob ? (Mob) ch : null);
+	}
+
+	@Override
+	public void kill() {
+		ModRegistry.destroyMobSprite(this);
+		super.kill();
+	}
+
+	@Override
+	public void destroy() {
+		ModRegistry.destroyMobSprite(this);
+		super.destroy();
 	}
 	
 	@Override

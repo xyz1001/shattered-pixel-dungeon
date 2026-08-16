@@ -929,6 +929,7 @@ public class Hero extends Char {
 			Barkskin.conditionallyAppend(this, (lvl*pointsInTalent(Talent.BARKSKIN))/2, 1 );
 		}
 		
+		if (!actResult && ready) com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.heroReadyForInput();
 		return actResult;
 	}
 	
