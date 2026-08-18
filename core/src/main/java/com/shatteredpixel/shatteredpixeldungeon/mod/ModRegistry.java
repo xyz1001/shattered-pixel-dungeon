@@ -5,6 +5,7 @@ public final class ModRegistry {
   public static void updateMobSprite(MobSprite sprite,Mob mob){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onMobSpriteUpdate(sprite,mob);}
   public static void destroyMobSprite(MobSprite sprite){for(ModOption o:OPTIONS)o.onMobSpriteDestroy(sprite);}
   public static void heroReadyForInput(){for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))o.onHeroReadyForInput();}
+  public static java.util.List<ModHooks.HeroStat> heroStats(com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero hero){java.util.List<ModHooks.HeroStat> result=new java.util.ArrayList<>();for(ModOption o:OPTIONS)if(ModSettings.enabled(o.id()))result.addAll(o.heroStats(hero));return result;}
  private static final List<ModOption> OPTIONS=Collections.unmodifiableList(ModCatalog.createOptions()); private static final String ACTIVE="mod.active", CONFIRMED="mod.confirmed", SNAPSHOT="mod.snapshot";
  private static final Set<String> snapshot=new HashSet<>(), pending=new LinkedHashSet<>();
  private static Object level; private static int position=-1;

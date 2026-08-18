@@ -17,6 +17,7 @@ public final class ModCatalog {
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.enchantmentrecycle.EnchantmentRecycle());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.actiontimer.ActionTimer());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.mysteriousguide.MysteriousGuide());
+  options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.herostats.HeroStats());
   return options;
  }
 }

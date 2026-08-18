@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import java.util.ArrayList;
 public interface ModOption {
  String id(); String title(); default boolean defaultEnabled(){return false;} default boolean isNewOnExistingSave(){return false;}
@@ -17,6 +18,7 @@ public interface ModOption {
  default void onMobSpriteUpdate(MobSprite sprite, Mob mob){}
  default void onMobSpriteDestroy(MobSprite sprite){}
  default void onHeroReadyForInput(){}
+ default java.util.List<ModHooks.HeroStat> heroStats(Hero hero){return java.util.Collections.emptyList();}
  default void store(Bundle bundle){} default void restore(Bundle bundle){}
  default int modifyComboRequirement(int requirement, Combo.ComboMove move){return requirement;} default float modifyComboDamageMultiplier(float multiplier, Combo.ComboMove move, int count){return multiplier;}
 }

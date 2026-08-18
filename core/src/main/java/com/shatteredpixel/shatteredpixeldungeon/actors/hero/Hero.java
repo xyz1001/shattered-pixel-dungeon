@@ -251,6 +251,11 @@ public class Hero extends Char {
 		
 		visibleEnemies = new ArrayList<>();
 	}
+
+	/** Raw persisted combat values for read-only extensions. */
+	public int baseAttackSkill() { return attackSkill; }
+	public int baseDefenseSkill() { return defenseSkill; }
+	public float baseMoveSpeed() { return baseSpeed; }
 	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;

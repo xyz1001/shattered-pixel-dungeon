@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.TalentButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
+import com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks;
 import com.watabou.input.KeyBindings;
 import com.watabou.input.KeyEvent;
 import com.watabou.noosa.Gizmo;
@@ -71,6 +72,7 @@ public class WndHero extends WndTabbed {
 		
 		stats = new StatsTab();
 		add( stats );
+		stats.layoutPane();
 
 		talents = new TalentsTab();
 		add(talents);
@@ -89,6 +91,7 @@ public class WndHero extends WndTabbed {
 					if (!stats.visible) {
 						stats.initialize();
 					}
+					stats.layoutPane();
 				}
 				stats.visible = stats.active = selected;
 			}
@@ -132,6 +135,7 @@ public class WndHero extends WndTabbed {
 	public void offset(int xOffset, int yOffset) {
 		super.offset(xOffset, yOffset);
 		talents.layout();
+		stats.layoutPane();
 		buffs.layout();
 	}
 
@@ -140,6 +144,8 @@ public class WndHero extends WndTabbed {
 		private static final int GAP = 6;
 		
 		private float pos;
+		private float statsTop;
+		private ScrollPane statsPane;
 		
 		public StatsTab() {
 			initialize();
@@ -184,7 +190,11 @@ public class WndHero extends WndTabbed {
 			infoButton.setRect(title.right(), 0, 16, 16);
 			add(infoButton);
 
-			pos = title.bottom() + 2*GAP;
+			statsTop = title.bottom() + 2*GAP;
+			statsPane = new ScrollPane(new Component());
+			add(statsPane);
+			pos = 0;
+			Component content = statsPane.content();
 
 			int strBonus = hero.STR() - hero.STR;
 			if (strBonus > 0)           statSlot( Messages.get(this, "str"), hero.STR + " + " + strBonus );
@@ -193,6 +203,7 @@ public class WndHero extends WndTabbed {
 			if (hero.shielding() > 0)   statSlot( Messages.get(this, "health"), hero.HP + "+" + hero.shielding() + "/" + hero.HT );
 			else                        statSlot( Messages.get(this, "health"), (hero.HP) + "/" + hero.HT );
 			statSlot( Messages.get(this, "exp"), hero.exp + "/" + hero.maxExp() );
+			for (ModHooks.HeroStat row : ModHooks.heroStats(hero)) statSlot(row.label, row.value);
 
 			pos += GAP;
 
@@ -211,6 +222,13 @@ public class WndHero extends WndTabbed {
 			}
 
 			pos += GAP;
+			content.setSize(WIDTH, pos);
+		}
+
+		private void layoutPane() {
+			if (statsPane != null) {
+				statsPane.setRect(0, statsTop, WIDTH, HEIGHT - statsTop);
+			}
 		}
 
 		private void statSlot( String label, String value ) {
@@ -223,7 +241,7 @@ public class WndHero extends WndTabbed {
 			} while (txt.width() >= WIDTH * 0.55f);
 			txt.setPos(0, pos + (6 - txt.height())/2);
 			PixelScene.align(txt);
-			add( txt );
+			statsPane.content().add( txt );
 
 			size = 8;
 			do {
@@ -232,7 +250,7 @@ public class WndHero extends WndTabbed {
 			} while (txt.width() >= WIDTH * 0.45f);
 			txt.setPos(WIDTH * 0.55f, pos + (6 - txt.height())/2);
 			PixelScene.align(txt);
-			add( txt );
+			statsPane.content().add( txt );
 			
 			pos += GAP + txt.height();
 		}
