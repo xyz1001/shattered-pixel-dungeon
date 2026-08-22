@@ -948,6 +948,11 @@ public abstract class Char extends Actor {
 		int shielded = dmg;
 		dmg = ShieldBuff.processDamage(this, dmg, src);
 		shielded -= dmg;
+		if (this instanceof Hero && dmg > 0 && HP - dmg <= 0
+				&& com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.heroDeathDamage(
+						(Hero) this, dmg, src)) {
+			return;
+		}
 		HP -= dmg;
 
 		if (HP > 0 && buff(Grim.GrimTracker.class) != null){
