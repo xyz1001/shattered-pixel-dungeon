@@ -425,7 +425,8 @@ public abstract class Wand extends Item {
 	}
 
 	public void updateLevel() {
-		maxCharges = Math.min( initialCharges() + level(), 10 );
+		int calculatedMaximum = initialCharges() + level();
+		maxCharges = com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.maxCharges(calculatedMaximum, Math.min(calculatedMaximum, 10));
 		curCharges = Math.min( curCharges, maxCharges );
 	}
 	

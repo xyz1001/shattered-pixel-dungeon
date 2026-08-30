@@ -19,6 +19,7 @@ public final class ModCatalog {
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.mysteriousguide.MysteriousGuide());
   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.herostats.HeroStats());
    options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.deathreturn.DeathReturnMod());
+   options.add(new com.shatteredpixel.shatteredpixeldungeon.mod.wandchargegrowth.WandChargeGrowth());
   return options;
  }
 }

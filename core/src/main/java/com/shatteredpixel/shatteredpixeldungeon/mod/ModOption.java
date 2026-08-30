@@ -20,5 +20,5 @@ public interface ModOption {
  default void onHeroReadyForInput(){}
  default java.util.List<ModHooks.HeroStat> heroStats(Hero hero){return java.util.Collections.emptyList();}
  default void store(Bundle bundle){} default void restore(Bundle bundle){}
- default int modifyComboRequirement(int requirement, Combo.ComboMove move){return requirement;} default float modifyComboDamageMultiplier(float multiplier, Combo.ComboMove move, int count){return multiplier;}
+ default int modifyComboRequirement(int requirement, Combo.ComboMove move){return requirement;} default float modifyComboDamageMultiplier(float multiplier, Combo.ComboMove move, int count){return multiplier;} default int modifyMaxCharges(int calculatedMaximum, int vanillaMaximum){return vanillaMaximum;}
 }

@@ -322,7 +322,8 @@ public class MagesStaff extends MeleeWeapon {
 			int curCharges = wand.curCharges;
 			wand.level(level());
 			//gives the wand one additional max charge
-			wand.maxCharges = Math.min(wand.maxCharges + 1, 10);
+			int calculatedMaximum = wand.maxCharges + 1;
+			wand.maxCharges = com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.maxCharges(calculatedMaximum, Math.min(calculatedMaximum, 10));
 			wand.curCharges = Math.min(curCharges + (levelled ? 1 : 0), wand.maxCharges);
 			updateQuickslot();
 		}
@@ -384,7 +385,8 @@ public class MagesStaff extends MeleeWeapon {
 		super.restoreFromBundle(bundle);
 		wand = (Wand) bundle.get(WAND);
 		if (wand != null) {
-			wand.maxCharges = Math.min(wand.maxCharges + 1, 10);
+			int calculatedMaximum = wand.maxCharges + 1;
+			wand.maxCharges = com.shatteredpixel.shatteredpixeldungeon.mod.ModHooks.maxCharges(calculatedMaximum, Math.min(calculatedMaximum, 10));
 		}
 	}
 
